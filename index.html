@@ -3,9 +3,161 @@
 <head>
 	<meta charset="utf-8">
 	<title>jQuery.smartcut</title>
+
+	<script type="text/javascript">
+		WebFontConfig = {
+			google: {
+				families: ['Norican']
+			}
+		};
+
+		(function() {
+			var wf = document.createElement('script');
+			wf.src = 'http://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+			wf.type = 'text/javascript';
+			wf.async = 'true';
+			var s = document.getElementsByTagName('script')[0];
+			s.parentNode.insertBefore(wf, s);
+		})();
+	</script>
+
+	<style type="text/css">
+		body {
+			margin: 0;
+			padding: 0;
+			background: #eee;
+			font-family: Georgia, Times, serif;
+			color: #3a3e45;
+			}
+		.wf-loading h1,
+		.wf-loading h2 {
+			font-family: Georgia, Times, serif;
+			font-style: italic;
+			}
+		.wf-active h1,
+		.wf-active h2 {
+			font-family: Norican, serif;
+			font-style: normal;
+			text-shadow: 0 0 2px rgba(0, 0, 0, .5);
+			}
+
+		h1 {
+			font-size: 56px;
+			font-weight: normal;
+			margin: 0 0 30px;
+			border-bottom: 1px solid #eee;
+			}
+		h2 {
+			font-size: 36px;
+			font-weight: normal;
+			margin: 0 0 10px;
+			line-height: 1;
+			}
+
+		.page {
+			width: 960px;
+			margin: 20px auto;
+			padding: 8px;
+			background: #fff;
+			position: relative;
+			z-index: 2;
+			box-shadow: 0 0 5px rgba(0, 0, 0, .25);
+			}
+		.page-inner {
+			padding: 8px;
+			border: 1px solid #ddd;
+			}
+
+		.tabs,
+		.tabs > li {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+			}
+		.tabs {
+			position: relative;
+			}
+
+		.example {
+			width: 256px;
+			padding: 4px;
+			font-family: Arial, Helvetica, sans-serif;
+			font-size: 14px;
+			border: 1px solid #ddd;
+			}
+	</style>
 </head>
 
 <body>
-	<h1>smartcut</h1>
+	<div class="page">
+		<div class="page-inner">
+			<h1>smartcut</h1>
+
+			<h2>summary</h2>
+			<p>smartcut is a jQuery plugin for shortening long texts and provide them with a „read more“ link</p>
+
+			<h2>examples</h2>
+			<h3>default options</h3>
+			<ul class="tabs">
+				<li>
+					<div class="tab">example</div>
+					<div class="example example-1">
+						Lorem ipsum dolor sit amet, aliquando abhorreant cu nec, sea ea omnes regione constituam. Illud dicta vis
+						in, ea nec eligendi recusabo imperdiet, ei vel libris audire rationibus. Falli ceteros ex qui, prima
+						partem menandri eum cu. Sanctus legimus denique mei no, modus falli verterem his id. Probo ludus praesent
+						eum an, cum justo oblique no, vix eu tation doming.
+						Ut nobis gloriatur ius. Id tale inani altera cum, ex tritani equidem referrentur est. Luptatum euripidis
+						necessitatibus pro ei, eu cum eius illum feugait. Eirmod euismod fuisset in has, vix cu putent verear
+						tractatos.
+						Brute possim sed id, elitr suavitate vituperata cu eum. Est tota neglegentur ei, dolor patrioque
+						hendrerit eam ne. Mucius accusamus ad nam, nibh dolores consequat at pro, habemus accusata ius id.
+						Prompta bonorum ius at, id vis praesent corrumpit, essent percipit eum in. Nam in prima accusata, his no
+						saepe iudicabit gubergren, ex dicat dicta usu.
+					</div>
+				</li>
+				<li>
+					<div class="tab">javascript</div>
+					<script src="https://gist.github.com/2046372.js?file=gistfile1.js"></script>
+				</li>
+			</ul>
+
+			<h3>custom threshold</h3>
+			<ul class="tabs">
+				<li>
+					<div class="tab">example</div>
+					<div class="example example-2">
+						Lorem ipsum dolor sit amet, aliquando abhorreant cu nec, sea ea omnes regione constituam. Illud dicta vis
+						in, ea nec eligendi recusabo imperdiet, ei vel libris audire rationibus. Falli ceteros ex qui, prima
+						partem menandri eum cu. Sanctus legimus denique mei no, modus falli verterem his id. Probo ludus praesent
+						eum an, cum justo oblique no, vix eu tation doming.
+						Ut nobis gloriatur ius. Id tale inani altera cum, ex tritani equidem referrentur est. Luptatum euripidis
+						necessitatibus pro ei, eu cum eius illum feugait. Eirmod euismod fuisset in has, vix cu putent verear
+						tractatos.
+						Brute possim sed id, elitr suavitate vituperata cu eum. Est tota neglegentur ei, dolor patrioque
+						hendrerit eam ne. Mucius accusamus ad nam, nibh dolores consequat at pro, habemus accusata ius id.
+						Prompta bonorum ius at, id vis praesent corrumpit, essent percipit eum in. Nam in prima accusata, his no
+						saepe iudicabit gubergren, ex dicat dicta usu.
+					</div>
+				</li>
+				<li>
+					<div class="tab">javascript</div>
+					<script src="https://gist.github.com/2046389.js?file=gistfile1.js"></script>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2rc1.min.js"></script>
+	<script type="text/javascript" src="https://raw.github.com/tsabolov/smartcut/master/jquery.smartcut.js"></script>
+
+	<script type="text/javascript">
+		$(function () {
+			/* Example 1 */
+			$('.example-1').smartcut();
+
+			/* Example 2 */
+			$('.example-2').smartcut({ threshold: 100 });
+		})
+	</script>
 </body>
 </html>
