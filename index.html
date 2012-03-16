@@ -28,6 +28,17 @@
 			background: #eee;
 			font-family: Georgia, Times, serif;
 			color: #3a3e45;
+			overflow-y: scroll;
+			background-color: #ddd;
+			background-image: -webkit-gradient(linear, right bottom, left top, color-stop(0, #eee), color-stop(0.25, #eee), color-stop(0.25, #ddd), color-stop(0.5, #ddd), color-stop(0.5, #eee), color-stop(0.75, #eee), color-stop(0.75, #ddd));
+			background-image: -webkit-linear-gradient(right bottom, #eee 0%, #eee 25%, #ddd 25%, #ddd 50%, #eee 50%, #eee 75%, #ddd 75%);
+			background-image: -moz-linear-gradient(right bottom, #eee 0%, #eee 25%, #ddd 25%, #ddd 50%, #eee 50%, #eee 75%, #ddd 75%);
+			background-image: -ms-linear-gradient(right bottom, #eee 0%, #eee 25%, #ddd 25%, #ddd 50%, #eee 50%, #eee 75%, #ddd 75%);
+			background-image: -o-linear-gradient(right bottom, #eee 0%, #eee 25%, #ddd 25%, #ddd 50%, #eee 50%, #eee 75%, #ddd 75%);
+			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#dddddd',GradientType=0 ); /* IE6-8 */
+			background-image: linear-gradient(right bottom, #eee 0%, #eee 25%, #ddd 25%, #ddd 50%, #eee 50%, #eee 75%, #ddd 75%);
+			background-size: 6px 6px;
+			background-attachment: fixed;
 			}
 		.wf-loading h1,
 		.wf-loading h2 {
@@ -38,7 +49,22 @@
 		.wf-active h2 {
 			font-family: Norican, serif;
 			font-style: normal;
-			text-shadow: 0 0 2px rgba(0, 0, 0, .5);
+			text-shadow: 0 0 2px rgba(0, 0, 0, .35);
+			}
+
+		a {
+			color: #36c;
+			text-decoration: none;
+			}
+		a:hover,
+		a:active {
+			text-decoration: underline;
+			}
+		a:visited {
+			color: #66c;
+			}
+		a:active {
+			color: #dc143c;
 			}
 
 		h1 {
@@ -50,114 +76,321 @@
 		h2 {
 			font-size: 36px;
 			font-weight: normal;
-			margin: 0 0 10px;
+			margin: 20px 0 10px;
 			line-height: 1;
+			}
+
+		footer {
+			width: 960px;
+			margin: 20px auto;
+			color: #999;
+			font-family: "Lucida Grande", sans-serif;
+			font-size: smaller;
+			text-align: right;
+			}
+
+		footer .social {
+			float: left;
+			}
+		footer .social > iframe,
+		footer .social > div {
+			display: inline-block;
+			vertical-align: top;
+			}
+		footer .copyright {
+			float: right;
 			}
 
 		.page {
 			width: 960px;
 			margin: 20px auto;
-			padding: 8px;
+			padding: 16px;
 			background: #fff;
-			position: relative;
 			z-index: 2;
-			box-shadow: 0 0 5px rgba(0, 0, 0, .25);
-			}
-		.page-inner {
-			padding: 8px;
-			border: 1px solid #ddd;
+			box-shadow: 0 0 10px rgba(0, 0, 0, .25);
 			}
 
-		.tabs,
-		.tabs > li {
+		.cols {}
+
+		.cols > .col {
+			width: 49.5%;
+			float: left;
+			}
+
+		.clear {
+			clear: both;
+			}
+
+		.tabs {}
+		.tabs > ul,
+		.tabs > ul > li {
 			margin: 0;
 			padding: 0;
 			list-style: none;
 			}
-		.tabs {
+		.tabs > ul {
+			height: 40px;
+			}
+		.tabs > ul > li {
+			margin-left: -1px;
+			padding: 9px 10px 11px;
+			float: left;
+			border: 1px solid #ddd;
+			border-bottom: 0;
+			background: #f5f5f5;
+			}
+		.tabs > ul > li.active {
 			position: relative;
+			top: -4px;
+			padding-top: 13px;
+			background: #fff;
+			border-radius: 4px 4px 0 0;
+			}
+		.tabs > ul > li a {
+			color: #3a3e45;
+			text-decoration: none;
+			}
+		.tabs > ul > li a:hover {
+			text-shadow: 0 0 5px rgba(82,168,236,.6);
+			}
+
+		.tabs > .tab {
+			padding: 10px 20px;
 			}
 
 		.example {
 			width: 256px;
-			padding: 4px;
+			padding: 7px;
 			font-family: Arial, Helvetica, sans-serif;
 			font-size: 14px;
-			border: 1px solid #ddd;
+			border: 1px solid #f3f3f3;
 			}
 	</style>
+	<link rel="stylesheet" href="prettify.css">
 </head>
 
 <body>
+	<div id="fb-root"></div>
+
 	<div class="page">
-		<div class="page-inner">
-			<h1>smartcut</h1>
+		<h1>smartcut</h1>
 
-			<h2>summary</h2>
-			<p>smartcut is a jQuery plugin for shortening long texts and provide them with a „read more“ link</p>
+		<h2>summary</h2>
+		<p>smartcut is a jQuery plugin for shortening long texts and provide them with a „read more“ link</p>
 
-			<h2>examples</h2>
-			<h3>default options</h3>
-			<ul class="tabs">
-				<li>
-					<div class="tab">example</div>
-					<div class="example example-1">
-						Lorem ipsum dolor sit amet, aliquando abhorreant cu nec, sea ea omnes regione constituam. Illud dicta vis
-						in, ea nec eligendi recusabo imperdiet, ei vel libris audire rationibus. Falli ceteros ex qui, prima
-						partem menandri eum cu. Sanctus legimus denique mei no, modus falli verterem his id. Probo ludus praesent
-						eum an, cum justo oblique no, vix eu tation doming.
-						Ut nobis gloriatur ius. Id tale inani altera cum, ex tritani equidem referrentur est. Luptatum euripidis
-						necessitatibus pro ei, eu cum eius illum feugait. Eirmod euismod fuisset in has, vix cu putent verear
-						tractatos.
-						Brute possim sed id, elitr suavitate vituperata cu eum. Est tota neglegentur ei, dolor patrioque
-						hendrerit eam ne. Mucius accusamus ad nam, nibh dolores consequat at pro, habemus accusata ius id.
-						Prompta bonorum ius at, id vis praesent corrumpit, essent percipit eum in. Nam in prima accusata, his no
-						saepe iudicabit gubergren, ex dicat dicta usu.
+		<h2>examples</h2>
+
+		<div class="cols">
+			<div class="col col-1">
+				<h3>default options</h3>
+				<div class="tabs">
+					<ul>
+						<li class="active"><a href="#">example</a></li>
+						<li><a href="#">javascript</a></li>
+					</ul>
+					<div class="tab">
+						<div class="example example-1">
+							Lorem ipsum dolor sit amet, aliquando abhorreant cu nec, sea ea omnes regione constituam. Illud dicta vis
+							in, ea nec eligendi recusabo imperdiet, ei vel libris audire rationibus. Falli ceteros ex qui, prima
+							partem menandri eum cu. Sanctus legimus denique mei no, modus falli verterem his id. Probo ludus praesent
+							eum an, cum justo oblique no, vix eu tation doming.
+							Ut nobis gloriatur ius. Id tale inani altera cum, ex tritani equidem referrentur est. Luptatum euripidis
+							necessitatibus pro ei, eu cum eius illum feugait. Eirmod euismod fuisset in has, vix cu putent verear
+							tractatos.
+							Brute possim sed id, elitr suavitate vituperata cu eum. Est tota neglegentur ei, dolor patrioque
+							hendrerit eam ne. Mucius accusamus ad nam, nibh dolores consequat at pro, habemus accusata ius id.
+							Prompta bonorum ius at, id vis praesent corrumpit, essent percipit eum in. Nam in prima accusata, his no
+							saepe iudicabit gubergren, ex dicat dicta usu.
+						</div>
 					</div>
-				</li>
-				<li>
-					<div class="tab">javascript</div>
-					<script src="https://gist.github.com/2046372.js?file=gistfile1.js"></script>
-				</li>
-			</ul>
-
-			<h3>custom threshold</h3>
-			<ul class="tabs">
-				<li>
-					<div class="tab">example</div>
-					<div class="example example-2">
-						Lorem ipsum dolor sit amet, aliquando abhorreant cu nec, sea ea omnes regione constituam. Illud dicta vis
-						in, ea nec eligendi recusabo imperdiet, ei vel libris audire rationibus. Falli ceteros ex qui, prima
-						partem menandri eum cu. Sanctus legimus denique mei no, modus falli verterem his id. Probo ludus praesent
-						eum an, cum justo oblique no, vix eu tation doming.
-						Ut nobis gloriatur ius. Id tale inani altera cum, ex tritani equidem referrentur est. Luptatum euripidis
-						necessitatibus pro ei, eu cum eius illum feugait. Eirmod euismod fuisset in has, vix cu putent verear
-						tractatos.
-						Brute possim sed id, elitr suavitate vituperata cu eum. Est tota neglegentur ei, dolor patrioque
-						hendrerit eam ne. Mucius accusamus ad nam, nibh dolores consequat at pro, habemus accusata ius id.
-						Prompta bonorum ius at, id vis praesent corrumpit, essent percipit eum in. Nam in prima accusata, his no
-						saepe iudicabit gubergren, ex dicat dicta usu.
+					<div class="tab">
+<pre class="prettyprint">
+$('.example-1').smartcut();
+</pre>
 					</div>
-				</li>
-				<li>
-					<div class="tab">javascript</div>
-					<script src="https://gist.github.com/2046389.js?file=gistfile1.js"></script>
-				</li>
-			</ul>
+				</div>
+
+				<h3>custom threshold</h3>
+				<div class="tabs">
+					<ul>
+						<li class="active"><a href="#">example</a></li>
+						<li><a href="#">javascript</a></li>
+					</ul>
+					<div class="tab">
+						<div class="example example-2">
+							Lorem ipsum dolor sit amet, aliquando abhorreant cu nec, sea ea omnes regione constituam. Illud dicta vis
+							in, ea nec eligendi recusabo imperdiet, ei vel libris audire rationibus. Falli ceteros ex qui, prima
+							partem menandri eum cu. Sanctus legimus denique mei no, modus falli verterem his id. Probo ludus praesent
+							eum an, cum justo oblique no, vix eu tation doming.
+							Ut nobis gloriatur ius. Id tale inani altera cum, ex tritani equidem referrentur est. Luptatum euripidis
+							necessitatibus pro ei, eu cum eius illum feugait. Eirmod euismod fuisset in has, vix cu putent verear
+							tractatos.
+							Brute possim sed id, elitr suavitate vituperata cu eum. Est tota neglegentur ei, dolor patrioque
+							hendrerit eam ne. Mucius accusamus ad nam, nibh dolores consequat at pro, habemus accusata ius id.
+							Prompta bonorum ius at, id vis praesent corrumpit, essent percipit eum in. Nam in prima accusata, his no
+							saepe iudicabit gubergren, ex dicat dicta usu.
+						</div>
+					</div>
+					<div class="tab">
+<pre class="prettyprint">
+$('.example-2').smartcut({ threshold: 100 });
+</pre>
+					</div>
+				</div>
+			</div><!-- div.col.col-1 -->
+
+			<div class="col col-2">
+				<h3>no less link</h3>
+				<div class="tabs">
+					<ul>
+						<li class="active"><a href="#">example</a></li>
+						<li><a href="#">javascript</a></li>
+					</ul>
+					<div class="tab">
+						<div class="example example-3">
+							Lorem ipsum dolor sit amet, aliquando abhorreant cu nec, sea ea omnes regione constituam. Illud dicta vis
+							in, ea nec eligendi recusabo imperdiet, ei vel libris audire rationibus. Falli ceteros ex qui, prima
+							partem menandri eum cu. Sanctus legimus denique mei no, modus falli verterem his id. Probo ludus praesent
+							eum an, cum justo oblique no, vix eu tation doming.
+							Ut nobis gloriatur ius. Id tale inani altera cum, ex tritani equidem referrentur est. Luptatum euripidis
+							necessitatibus pro ei, eu cum eius illum feugait. Eirmod euismod fuisset in has, vix cu putent verear
+							tractatos.
+							Brute possim sed id, elitr suavitate vituperata cu eum. Est tota neglegentur ei, dolor patrioque
+							hendrerit eam ne. Mucius accusamus ad nam, nibh dolores consequat at pro, habemus accusata ius id.
+							Prompta bonorum ius at, id vis praesent corrumpit, essent percipit eum in. Nam in prima accusata, his no
+							saepe iudicabit gubergren, ex dicat dicta usu.
+						</div>
+					</div>
+					<div class="tab">
+<pre class="prettyprint">
+$('.example-3').smartcut({ lessLink: false });
+</pre>
+					</div>
+				</div>
+
+				<h3>custom links text</h3>
+				<div class="tabs">
+					<ul>
+						<li class="active"><a href="#">example</a></li>
+						<li><a href="#">javascript</a></li>
+					</ul>
+					<div class="tab">
+						<div class="example example-4">
+							Lorem ipsum dolor sit amet, aliquando abhorreant cu nec, sea ea omnes regione constituam. Illud dicta vis
+							in, ea nec eligendi recusabo imperdiet, ei vel libris audire rationibus. Falli ceteros ex qui, prima
+							partem menandri eum cu. Sanctus legimus denique mei no, modus falli verterem his id. Probo ludus praesent
+							eum an, cum justo oblique no, vix eu tation doming.
+							Ut nobis gloriatur ius. Id tale inani altera cum, ex tritani equidem referrentur est. Luptatum euripidis
+							necessitatibus pro ei, eu cum eius illum feugait. Eirmod euismod fuisset in has, vix cu putent verear
+							tractatos.
+							Brute possim sed id, elitr suavitate vituperata cu eum. Est tota neglegentur ei, dolor patrioque
+							hendrerit eam ne. Mucius accusamus ad nam, nibh dolores consequat at pro, habemus accusata ius id.
+							Prompta bonorum ius at, id vis praesent corrumpit, essent percipit eum in. Nam in prima accusata, his no
+							saepe iudicabit gubergren, ex dicat dicta usu.
+						</div>
+					</div>
+					<div class="tab">
+<pre class="prettyprint">
+$('.example-4').smartcut({
+  moreText: 'read more',
+  lessText: 'read less'
+});
+</pre>
+					</div>
+				</div>
+			</div><!-- div.col.col-2 -->
+
+			<div class="clear"></div>
+		</div><!-- div.cols -->
+	</div> <!-- div.page -->
+
+	<footer>
+		<div class="social">
+			<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://tsabolov.github.com/smartcut/" data-text="jQuery.smartcut plugin for intelligent text shortening">Tweet</a>
+
+			<div class="fb-like" data-href="http://tsabolov.github.com/smartcut/" data-send="false" data-layout="button_count" data-width="110" data-show-faces="false"></div>
+
+			<div class="g-plusone" data-size="medium" data-href="http://tsabolov.github.com/smartcut/"></div>
 		</div>
-	</div>
+		<div class="copyright">2012 &copy; <a href="https://github.com/tsabolov">tsabolov</a></div>
+		<div class="clear"></div>
+	</footer>
+
+	<a href="http://github.com/tsabolov/smartcut"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://a248.e.akamai.net/assets.github.com/img/71eeaab9d563c2b3c590319b398dd35683265e85/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub"></a>
 
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2rc1.min.js"></script>
+	<script type="text/javascript" src="prettify.js"></script>
 	<script type="text/javascript" src="https://raw.github.com/tsabolov/smartcut/master/jquery.smartcut.js"></script>
 
 	<script type="text/javascript">
 		$(function () {
-			/* Example 1 */
-			$('.example-1').smartcut();
+			prettyPrint();
 
-			/* Example 2 */
-			$('.example-2').smartcut({ threshold: 100 });
+			$('.tabs').each(function () {
+				var $tabs = $(this),
+						$active = $tabs.find('> ul > li.active');
+
+				$tabs.find('.tab').hide().eq($active.index()).show();
+			});
+
+			$('.tabs > ul > li').click(function (e) {
+				var $this = $(this),
+						$tab = $this.closest('.tabs').find('.tab').eq($this.index());
+
+				e.preventDefault();
+
+				if ($this.is(':not(.active)')) {
+					$this.siblings('.active').removeClass('active');
+					$this.addClass('active');
+
+					$tab.siblings('.tab:visible').hide();
+					$tab.show();
+				}
+			});
 		})
+	</script>
+
+	<script type="text/javascript">
+		/* Example 1 */
+		$('.example-1').smartcut();
+
+		/* Example 2 */
+		$('.example-2').smartcut({ threshold: 100 });
+
+		/* Example 3 */
+		$('.example-3').smartcut({ lessLink: false });
+
+		/* Example 4 */
+		$('.example-4').smartcut({ moreText: 'READ MORE', lessText: 'READ LESS' });
+	</script>
+
+	<script type="text/javascript">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-30112511-1']);
+		_gaq.push(['_trackPageview']);
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
+
+	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+	<script>(function(d, s, id) {
+		var js, fjs = d.getElementsByTagName(s)[0];
+		if (d.getElementById(id)) return;
+		js = d.createElement(s); js.id = id;
+		js.src = "https://connect.facebook.net/en_US/all.js#xfbml=1&appId=244743585582018";
+		fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));</script>
+
+	<script type="text/javascript">
+		(function() {
+			var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+			po.src = 'https://apis.google.com/js/plusone.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+		})();
 	</script>
 </body>
 </html>
