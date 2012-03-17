@@ -75,7 +75,7 @@
 				var $cut = $('<span></span>'),
 						$tail = $('<span></span>'),
 						$ellipsis = $('<span>...</span>'),
-						$moreLink = $('<a href="#">' + options.moreText + '</a>');
+						$moreLink = $('<a href="javascript:;">' + options.moreText + '</a>');
 
 				$moreLink.addClass(options.moreLinkClass);
 
@@ -83,33 +83,43 @@
 
 				$tail.css({ display: 'none' }).text(cut[1]);
 
-				$moreLink.css('marginLeft', 5).mousedown(function (e) {
+				$moreLink.css('marginLeft', 5).click(function (e) {
 					e.preventDefault();
 
 					if ($tail.is(':visible')) {
-						options.fade ? $tail.add($moreLink).fadeOut(options.fadeDuration) : $tail.add($moreLink).hide();
+						var beforeCollapseEvent = $.Event('beforeCollapse');
+						$this.trigger(beforeCollapseEvent);
 
-						$tail.promise().done(function () {
-							$moreLink
-								.removeClass(options.lessLinkClass)
-								.addClass(options.moreLinkClass)
-								.text(options.moreText);
+						if (beforeCollapseEvent.result !== false) {
+							options.fade ? $tail.add($moreLink).fadeOut(options.fadeDuration) : $tail.add($moreLink).hide();
 
-							$ellipsis.show();
-							options.fade ? $moreLink.fadeIn(options.fadeDuration) : $moreLink.show();
-						});
+							$tail.promise().done(function () {
+								$moreLink
+									.removeClass(options.lessLinkClass)
+									.addClass(options.moreLinkClass)
+									.text(options.moreText);
+
+								$ellipsis.show();
+								options.fade ? $moreLink.fadeIn(options.fadeDuration) : $moreLink.show();
+							});
+						}
 					}
 					else {
-						$ellipsis.hide();
-						$moreLink
-							.hide()
-							.removeClass(options.moreLinkClass)
-							.addClass(options.lessLinkClass)
-							.text(options.lessText);
+						var beforeExpandEvent = $.Event('beforeExpand');
+						$this.trigger(beforeExpandEvent);
 
-						options.fade ? $tail.fadeIn(options.fadeDuration) : $tail.show();
-						if (options.lessLink) {
-							options.fade ? $moreLink.fadeIn(options.fadeDuration) : $moreLink.show();
+						if (beforeExpandEvent.result !== false) {
+							$ellipsis.hide();
+							$moreLink
+								.hide()
+								.removeClass(options.moreLinkClass)
+								.addClass(options.lessLinkClass)
+								.text(options.lessText);
+
+							options.fade ? $tail.fadeIn(options.fadeDuration) : $tail.show();
+							if (options.lessLink) {
+								options.fade ? $moreLink.fadeIn(options.fadeDuration) : $moreLink.show();
+							}
 						}
 					}
 				});
