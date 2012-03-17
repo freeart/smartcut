@@ -8,7 +8,9 @@
 			tolerance = [tolerance, tolerance];
 		}
 
-		range = range.sort(function (a, b) { return a > b });
+		range = range.sort(function (a, b) {
+			return a > b
+		});
 		range = [range[0] - tolerance[0], range[range.length - 1] + tolerance[1]];
 
 		return value >= range[0] && value <= range[1];
@@ -30,10 +32,10 @@
 			return [];
 		}
 
-		text = $.trim( text.replace(/(\s)+/g, '$1') );
+		text = $.trim(text.replace(/(\s)+/g, '$1'));
 
 		var nearestSpace = text.indexOf(' ', options.threshold) || 0,
-				nearestPeriod = text.indexOf('.', options.threshold) || 0;
+			nearestPeriod = text.indexOf('.', options.threshold) || 0;
 
 		if (!nearestSpace) {
 			return [text.substr(0, options.threshold), text.substr(options.threshold)];
@@ -59,7 +61,11 @@
 			lessLinkClass: '',
 			lessText: 'less',
 			fade: true,
-			fadeDuration: 100
+			fadeDuration: 100,
+			beforeAction: function () {
+			},
+			afterAction: function () {
+			}
 		}, options || {});
 
 		return this.each(function () {
@@ -73,9 +79,9 @@
 
 			if (cut[1]) {
 				var $cut = $('<span></span>'),
-						$tail = $('<span></span>'),
-						$ellipsis = $('<span>...</span>'),
-						$moreLink = $('<a href="#">' + options.moreText + '</a>');
+					$tail = $('<span></span>'),
+					$ellipsis = $('<span>...</span>'),
+					$moreLink = $('<a href="#">' + options.moreText + '</a>');
 
 				$moreLink.addClass(options.moreLinkClass);
 
@@ -85,10 +91,10 @@
 
 				$moreLink.css('marginLeft', 5).mousedown(function (e) {
 					e.preventDefault();
-
 					if ($tail.is(':visible')) {
 						options.fade ? $tail.add($moreLink).fadeOut(options.fadeDuration) : $tail.add($moreLink).hide();
 
+						options.beforeAction('more');
 						$tail.promise().done(function () {
 							$moreLink
 								.removeClass(options.lessLinkClass)
@@ -96,11 +102,19 @@
 								.text(options.moreText);
 
 							$ellipsis.show();
-							options.fade ? $moreLink.fadeIn(options.fadeDuration) : $moreLink.show();
+							if (options.fade) {
+								$moreLink.fadeIn(options.fadeDuration).promise().done(function () {
+									options.afterAction('more');
+								})
+							} else {
+								$moreLink.show();
+								options.afterAction('more');
+							}
 						});
 					}
 					else {
 						$ellipsis.hide();
+						options.beforeAction('less');
 						$moreLink
 							.hide()
 							.removeClass(options.moreLinkClass)
@@ -109,7 +123,14 @@
 
 						options.fade ? $tail.fadeIn(options.fadeDuration) : $tail.show();
 						if (options.lessLink) {
-							options.fade ? $moreLink.fadeIn(options.fadeDuration) : $moreLink.show();
+							if (options.fade) {
+								$moreLink.fadeIn(options.fadeDuration).promise().done(function () {
+									options.afterAction('less');
+								})
+							} else {
+								$moreLink.show()
+								options.afterAction('less');
+							}
 						}
 					}
 				});
