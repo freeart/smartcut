@@ -1,4 +1,19 @@
+/*!
+ * jQuery.smartcut 1.0
+ * http://tsabolov.github.com/smartcut/
+ *
+ * Copyright 2012, Konstantin Tsabolov
+ */
 (function ($, undefined) {
+	var togglers = {
+		generic: function () {
+			this.toggle();
+		},
+		fade: function () {
+			this.fadeToggle(100);
+		}
+	};
+
 	function isInRange(range, value, tolerance) {
 		if (!tolerance || typeof tolerance !== 'number') {
 			tolerance = [0, 0];
@@ -16,12 +31,12 @@
 
 	function smartcut(text, options) {
 		options = $.extend({
-			threshold: 250,
+			baseLength: 250,
 			tolerance: 10
 		}, options || {});
 
 		if (options.tailLength === undefined) {
-			options.tailLength = Math.min(options.threshold / 2, 50);
+			options.tailLength = Math.min(options.baseLength / 2, 50);
 		}
 
 		text || (text = '');
@@ -32,14 +47,14 @@
 
 		text = $.trim( text.replace(/(\s)+/g, '$1') );
 
-		var nearestSpace = text.indexOf(' ', options.threshold) || 0,
-				nearestPeriod = text.indexOf('.', options.threshold) || 0;
+		var nearestSpace = text.indexOf(' ', options.baseLength) || 0,
+				nearestPeriod = text.indexOf('.', options.baseLength) || 0;
 
 		if (!nearestSpace) {
-			return [text.substr(0, options.threshold), text.substr(options.threshold)];
+			return [text.substr(0, options.baseLength), text.substr(options.baseLength)];
 		}
 
-		if (text.length <= options.threshold || text.substr(nearestSpace).length <= options.tailLength) {
+		if (text.length <= options.baseLength || text.substr(nearestSpace).length <= options.tailLength) {
 			return [text];
 		}
 
@@ -58,9 +73,23 @@
 			lessLink: true,
 			lessLinkClass: '',
 			lessText: 'less',
-			fade: true,
-			fadeDuration: 100
+			toggleFn: 'fade',
+			linkToggleFn: 'fade'
 		}, options || {});
+
+		if (typeof options.toggleFn === 'string' && $.isFunction(togglers[options.toggleFn])) {
+			options.toggleFn = togglers[options.toggleFn];
+		}
+		else if (!$.isFunction(options.toggleFn)) {
+			options.toggleFn = togglers['generic'];
+		}
+
+		if (typeof options.linkToggleFn === 'string' && $.isFunction(togglers[options.linkToggleFn])) {
+			options.linkToggleFn = togglers[options.linkToggleFn];
+		}
+		else if (!$.isFunction(options.linkToggleFn)) {
+			options.linkToggleFn = togglers['generic'];
+		}
 
 		return this.each(function () {
 			var $this = $(this);
@@ -91,7 +120,8 @@
 						$this.trigger(beforeCollapseEvent);
 
 						if (beforeCollapseEvent.result !== false) {
-							options.fade ? $tail.add($moreLink).fadeOut(options.fadeDuration) : $tail.add($moreLink).hide();
+							options.toggleFn.call($tail);
+							options.linkToggleFn.call($moreLink);
 
 							$tail.promise().done(function () {
 								$moreLink
@@ -100,7 +130,7 @@
 									.text(options.moreText);
 
 								$ellipsis.show();
-								options.fade ? $moreLink.fadeIn(options.fadeDuration) : $moreLink.show();
+								options.linkToggleFn.call($moreLink);
 							});
 						}
 					}
@@ -116,9 +146,11 @@
 								.addClass(options.lessLinkClass)
 								.text(options.lessText);
 
-							options.fade ? $tail.fadeIn(options.fadeDuration) : $tail.show();
+							options.toggleFn.call($tail);
 							if (options.lessLink) {
-								options.fade ? $moreLink.fadeIn(options.fadeDuration) : $moreLink.show();
+								$tail.promise().done(function () {
+									options.linkToggleFn.call($moreLink);
+								});
 							}
 						}
 					}
