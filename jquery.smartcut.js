@@ -66,6 +66,13 @@
 	}
 
 	$.fn.smartcut = function (options) {
+		var command;
+
+		if (typeof options === 'string') {
+			command = options;
+			options = {};
+		}
+
 		options = $.extend({
 			moreLink: true,
 			moreLinkClass: '',
@@ -74,7 +81,8 @@
 			lessLinkClass: '',
 			lessText: 'less',
 			toggleFn: 'fade',
-			linkToggleFn: 'fade'
+			linkToggleFn: 'fade',
+			expanded: false
 		}, options || {});
 
 		if (typeof options.toggleFn === 'string' && $.isFunction(togglers[options.toggleFn])) {
@@ -91,10 +99,76 @@
 			options.linkToggleFn = togglers['generic'];
 		}
 
+		function toggle(show) {
+			var $this = this,
+					smartcut = $this.data('smartcut'),
+					$tail = smartcut.$tail,
+					$ellipsis = smartcut.$ellipsis,
+					$moreLink = smartcut.$moreLink;
+
+			if (typeof show !== 'boolean') {
+				show = $tail.is(':hidden');
+			}
+			if (show) {
+				var beforeExpandEvent = $.Event('beforeExpand');
+				$this.trigger(beforeExpandEvent);
+
+				if (beforeExpandEvent.result !== false) {
+					$ellipsis.hide();
+					$moreLink
+							.hide()
+							.removeClass(options.moreLinkClass)
+							.addClass(options.lessLinkClass)
+							.text(options.lessText);
+
+					options.toggleFn.call($tail);
+					if (options.lessLink) {
+						$tail.promise().done(function () {
+							options.linkToggleFn.call($moreLink);
+						});
+					}
+				}
+			}
+			else {
+				var beforeCollapseEvent = $.Event('beforeCollapse');
+				$this.trigger(beforeCollapseEvent);
+
+				if (beforeCollapseEvent.result !== false) {
+					options.toggleFn.call($tail);
+					options.linkToggleFn.call($moreLink);
+
+					$tail.promise().done(function () {
+						$moreLink
+								.removeClass(options.lessLinkClass)
+								.addClass(options.moreLinkClass)
+								.text(options.moreText);
+
+						$ellipsis.show();
+						options.linkToggleFn.call($moreLink);
+					});
+				}
+			}
+		}
+
 		return this.each(function () {
 			var $this = $(this);
 
-			if ($this.is('textarea, input, select, a') || $this.children().length) {
+			if ($this.is('textarea, input, select, a') || $this.children().length && !(command && $this.data('smartcut'))) {
+				return true;
+			}
+
+			if (command) {
+				if ($this.data('smartcut')) {
+			    if (command === 'expand' && $this.data('smartcut').$tail.is(':hidden')) {
+						toggle.call($this, true);
+					}
+					else if (command === 'collapse' && $this.data('smartcut').$tail.is(':visible')) {
+						toggle.call($this, false);
+					}
+					else if (command === 'toggle') {
+						toggle.call($this);
+					}
+				}
 				return true;
 			}
 
@@ -104,56 +178,30 @@
 				var $cut = $('<span></span>'),
 						$tail = $('<span></span>'),
 						$ellipsis = $('<span>...</span>'),
-						$moreLink = $('<a href="javascript:;">' + options.moreText + '</a>');
+						$moreLink = $('<a href="javascript:;"></a>');
 
-				$moreLink.addClass(options.moreLinkClass);
+				$this.data('smartcut', {
+					$tail: $tail,
+					$ellipsis: $ellipsis,
+					$moreLink: $moreLink
+				});
 
 				$cut.html(cut[0]);
+				$tail.html(cut[1]);
 
-				$tail.css({ display: 'none' }).text(cut[1]);
+				if (options.expanded === true) {
+					$moreLink.text(options.lessText).addClass(options.lessLinkClass);
+					$ellipsis.hide();
+				}
+				else {
+					$moreLink.text(options.moreText).addClass(options.moreLinkClass);
+					$tail.hide();
+					$ellipsis.show();
+				}
 
 				$moreLink.css('marginLeft', 5).click(function (e) {
 					e.preventDefault();
-
-					if ($tail.is(':visible')) {
-						var beforeCollapseEvent = $.Event('beforeCollapse');
-						$this.trigger(beforeCollapseEvent);
-
-						if (beforeCollapseEvent.result !== false) {
-							options.toggleFn.call($tail);
-							options.linkToggleFn.call($moreLink);
-
-							$tail.promise().done(function () {
-								$moreLink
-									.removeClass(options.lessLinkClass)
-									.addClass(options.moreLinkClass)
-									.text(options.moreText);
-
-								$ellipsis.show();
-								options.linkToggleFn.call($moreLink);
-							});
-						}
-					}
-					else {
-						var beforeExpandEvent = $.Event('beforeExpand');
-						$this.trigger(beforeExpandEvent);
-
-						if (beforeExpandEvent.result !== false) {
-							$ellipsis.hide();
-							$moreLink
-								.hide()
-								.removeClass(options.moreLinkClass)
-								.addClass(options.lessLinkClass)
-								.text(options.lessText);
-
-							options.toggleFn.call($tail);
-							if (options.lessLink) {
-								$tail.promise().done(function () {
-									options.linkToggleFn.call($moreLink);
-								});
-							}
-						}
-					}
+					toggle.call($this);
 				});
 
 				$this.empty().append($cut);
